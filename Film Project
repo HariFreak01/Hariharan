@@ -1,0 +1,124 @@
+create database Film
+use Film
+create table Artist(Art_id int primary key,
+Art_name varchar(40),
+Art_gender varchar(25),
+Art_language varchar(50))
+select * from Artist
+insert into Artist values(101,"Vijay","Male","Tamil")
+insert into Artist values(102,"Dhanush","Male","Tamil/English")
+insert into Artist values(103,"Rashmika","Female","Telugu")
+insert into Artist values(104,"Samantha","Female","Tamil/Telugu")
+insert into Artist values(105,"Emma Waston","Female","English")
+
+create table Producer(Prod_id int primary key,
+Prod_name varchar(60),
+Prod_Phone varchar(12))
+select * from Producer
+insert into Producer values(200,"Aditya",6789456327)
+insert into Producer values(201,"Faran",7788994455)
+insert into Producer values(202,"Yash",8899445566)
+insert into Producer values(203,"Niraj",9944887755)
+
+create table Films(Film_id int primary key,
+Film_title varchar(255),
+Film_year year,
+Film_language varchar(50),
+Prod_id int)
+select * from Films
+insert into Films values(11,"Master",2021,"Tamil",201)  
+insert into Films values(12,"Maari",2016,"Tamil",200)
+insert into Films values(13,"Varisu",2023,"Telugu",203)
+insert into Films values(14,"The May",2019,"English",200)
+insert into Films values(15,"Kaththi",2014,"Tamil",202)
+
+create table Casting(Art_ID int,
+Film_id int,
+Part varchar(255))
+Select * from Casting
+insert into Casting values(101,11,"Actor")
+insert into Casting values(101,13,"Actor")
+insert into Casting values(104,15,"Actress")
+insert into Casting values(103,13,"Actress")
+insert into Casting values(105,14,"Guest")
+
+create table Review(Film_id int, Stars int)
+select * from Review
+insert into Review values(11,5)
+insert into Review values(12,3)
+insert into Review values(13,4)
+insert into Review values(14,2)
+insert into Review values(15,4)
+
+create table Directors(Dir_name varchar(100), Dir_id int, Num_movies int)
+select * from Directors
+insert into Directors values("Mani Ratnam",1,55)
+insert into Directors values("Bala",2,26)
+insert into Directors values("Gautham Menom",3,37)
+insert into Directors values("Lokesh Kanagaraj",6,5)
+insert into Directors values("Rajesh",7,5)
+//Task 1
+select Prod_id from Producer where Prod_name = 'Niraj'
+//Task 2
+select Film_title from Films where Prod_id in (select Prod_id from Producer where Prod_name = 'Niraj');
+//Task 3
+select a.Art_name, b.Film_title, b.Film_year
+from Artist a, Films b, Casting c 
+where a.Art_id = c.Art_id and c.Film_id = b.Film_id 
+and b.Film_year between 2014 and 2020
+
+select * from Films where Film_year between 2014 and 2020
+//Task 4
+select b.film_title, d.Stars
+from Films b, Review d where b.Film_id = d.Film_id
+order by d.Stars
+
+select b.film_title, d.Stars
+from Films b, Review d where b.Film_id = d.Film_id
+order by d.Stars desc
+//Task 5
+update Review set Stars = 5
+where Film_id in(select Film_id from Films
+where Prod_id in(select Prod_id 
+from Producer where Prod_name = 'Niraj'));
+//Task 6
+select Films.Film_id, Casting.Part, Films.Film_title 
+from Films
+left join Casting ON Films.Film_id = Casting.Film_id
+union
+select Films.Film_id, Casting.Part, Films.Film_title 
+from Films
+right join Casting ON Films.Film_id = Casting.Film_id
+
+
+delete from Directors where Dir_name = "Mani Ratnam"
+alter table Directors
+update Directors set Dir_name = "GVM" where Dir_id = 2
+
+select * from Directors
+where Dir_name = "Lokesh Kanagaraj" and Dir_id = 6
+
+select * from Directors
+where Dir_name = "Lokesh Kanagaraj" or Num_movies = 5
+
+select * from Directors
+where not Num_movies = 5
+
+select upper(Dir_name) from Directors
+select lower(Dir_name) from Directors
+
+create table Artist_details(Art_Old_id int , Art_id int)
+select * from Artist_details
+insert into Artist_details values(101,101)
+insert into Artist_details values(102,102)
+insert into Artist_details values(102,103)
+insert into Artist_details values(104,104)
+insert into Artist_details values(106,105)
+
+alter table Artist_details
+truncate table Artist_details
+drop table Artist_details
+select * from Artist_details
+
+delete from Artist where Art_gender = 'Male'
+select * from Artist
